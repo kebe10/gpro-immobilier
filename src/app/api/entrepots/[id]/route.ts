@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
-import { writeFile, mkdir, unlink } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { randomUUID } from 'crypto';
 
@@ -14,21 +14,14 @@ function extractBearerToken(request: NextRequest): string | null {
 async function saveUploadedFiles(formData: FormData): Promise<string> {
   const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
   await mkdir(uploadsDir, { recursive: true });
-
   const urls: string[] = [];
-
   const existingPhotos = formData.get('photos');
   if (existingPhotos && typeof existingPhotos === 'string') {
     try {
       const parsed = JSON.parse(existingPhotos);
-      if (Array.isArray(parsed)) {
-        urls.push(...parsed);
-      }
-    } catch {
-      // Not JSON, ignore
-    }
+      if (Array.isArray(parsed)) urls.push(...parsed);
+    } catch { /* ignore */ }
   }
-
   const files = formData.getAll('files');
   for (const file of files) {
     if (file instanceof File) {
@@ -40,13 +33,13 @@ async function saveUploadedFiles(formData: FormData): Promise<string> {
       urls.push(`/uploads/${filename}`);
     }
   }
-
   return JSON.stringify(urls);
 }
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const entrepot = await db.entrepot.findUnique({ where: { id: params.id } });
+    const { id } = await params;
+    const entrepot = await db.entrepot.findUnique({ where: { id } });
     if (!entrepot) {
       return NextResponse.json({ error: 'Entrepôt non trouvé' }, { status: 404 });
     }
@@ -56,21 +49,19 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const token = extractBearerToken(request);
     if (!token || !verifyToken(token)) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
-
-    const existing = await db.entrepot.findUnique({ where: { id: params.id } });
+    const existing = await db.entrepot.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: 'Entrepôt non trouvé' }, { status: 404 });
     }
-
     const contentType = request.headers.get('content-type') || '';
     let data: Record<string, unknown> = {};
-
     if (contentType.includes('multipart/form-data')) {
       const formData = await request.formData();
       if (formData.has('titre')) data.titre = formData.get('titre') as string;
@@ -90,32 +81,25 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         if (body[field] !== undefined) data[field] = body[field];
       }
     }
-
-    const entrepot = await db.entrepot.update({
-      where: { id: params.id },
-      data,
-    });
-
+    const entrepot = await db.entrepot.update({ where: { id }, data });
     return NextResponse.json({ entrepot });
   } catch {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const token = extractBearerToken(request);
     if (!token || !verifyToken(token)) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
-
-    const existing = await db.entrepot.findUnique({ where: { id: params.id } });
+    const existing = await db.entrepot.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: 'Entrepôt non trouvé' }, { status: 404 });
     }
-
-    await db.entrepot.delete({ where: { id: params.id } });
-
+    await db.entrepot.delete({ where: { id } });
     return NextResponse.json({ message: 'Entrepôt supprimé' });
   } catch {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
