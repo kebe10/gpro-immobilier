@@ -187,7 +187,7 @@ export default function AdminDashboard() {
             }`}
           >
             <Home className="w-4 h-4" />
-            Villas ({villas.length})
+            Résidentiel ({villas.length})
           </button>
         </div>
 
@@ -210,7 +210,7 @@ export default function AdminDashboard() {
               className="flex items-center gap-2 bg-gpro-accent text-white px-4 py-2 font-display text-uppercase text-sm hover:bg-gpro-accent/80 transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Ajouter une villa
+              Ajouter un bien résidentiel
             </button>
           </div>
         )}
@@ -350,7 +350,7 @@ export default function AdminDashboard() {
                 {villas.length === 0 && (
                   <tr>
                     <td colSpan={6} className="p-8 text-center text-muted-foreground">
-                      Aucune villa
+                      Aucun bien résidentiel
                     </td>
                   </tr>
                 )}
