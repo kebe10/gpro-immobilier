@@ -85,7 +85,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gpro-muted text-xs">
-            &copy; 2025 GPRO Immobilier. Tous droits réservés.
+            &copy; 2026 GPRO Immobilier. Tous droits réservés.
           </p>
           <button
             onClick={() => navigate('admin-login')}
