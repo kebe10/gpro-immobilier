@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { loginAdmin, verifyToken, invalidateToken } from '@/lib/auth';
+import { loginAdmin, createAdmin, verifyToken, invalidateToken } from '@/lib/auth';
 import { db } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
@@ -45,6 +45,34 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ user });
+  } catch {
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { email, password, name, secretCode } = body;
+
+    if (!email || !password || !name || !secretCode) {
+      return NextResponse.json({ error: 'Tous les champs sont requis' }, { status: 400 });
+    }
+
+    // Vérifier le code secret (configurable via env ou hardcodé)
+    const validCode = process.env.ADMIN_SECRET_CODE || 'gpro2025';
+    if (secretCode !== validCode) {
+      return NextResponse.json({ error: 'Code secret invalide' }, { status: 403 });
+    }
+
+    // Vérifier qu'aucun admin n'existe déjà (sécurité : un seul admin)
+    const existing = await db.adminUser.findFirst();
+    if (existing) {
+      return NextResponse.json({ error: 'Un compte administrateur existe déjà. Connectez-vous ou contactez le support.' }, { status: 409 });
+    }
+
+    const admin = await createAdmin(email, password, name);
+    return NextResponse.json({ message: 'Compte administrateur créé avec succès', admin: { id: admin.id, email: admin.email, name: admin.name } }, { status: 201 });
   } catch {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
