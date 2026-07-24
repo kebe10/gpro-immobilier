@@ -11,6 +11,7 @@ interface WarehouseCard {
   surface: string;
   usage: string;
   access: string;
+  image: string;
 }
 
 const warehouses: WarehouseCard[] = [
@@ -18,22 +19,25 @@ const warehouses: WarehouseCard[] = [
     capacity: 'PETITE CAPACITÉ',
     title: 'Entrepôts Compact',
     surface: '50 — 200 m²',
-    usage: 'Stockage léger, marchandises diverses, e-commerce',
+    usage: 'Stockage léger, marchandises diverses, e-commerce, archivage.',
     access: 'Porte piétonne + véhicule léger',
+    image: '/images/warehouse-interior.jpg',
   },
   {
     capacity: 'MOYENNE CAPACITÉ',
     title: 'Entrepôts Standard',
     surface: '200 — 1 000 m²',
-    usage: 'Marchandises en vrac, palettisé, alimentaire',
+    usage: 'Marchandises en vrac, produits palettisés, stockage alimentaire, distribution.',
     access: 'Porte sectionnelle, camion 19T',
+    image: '/images/hero-warehouse.jpg',
   },
   {
     capacity: 'GRANDE CAPACITÉ',
     title: 'Entrepôts Industriel',
     surface: '1 000 — 5 000 m²+',
-    usage: 'Conteneurs, marchandises industrielles, logistique lourde',
+    usage: 'Conteneurs, marchandises industrielles, logistique lourde, cross-docking.',
     access: 'Quai de déchargement, semi-remorque',
+    image: '/images/hero-warehouse.jpg',
   },
 ];
 
@@ -49,15 +53,22 @@ function WarehouseCardItem({ card, index }: { card: WarehouseCard; index: number
       transition={{ duration: 0.5, delay: index * 0.15, ease: 'easeOut' }}
       className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow overflow-hidden group"
     >
-      <div className="h-1.5 bg-gpro-accent" />
-      <div className="p-6">
-        <span className="font-mono-spec text-gpro-accent text-xs text-uppercase">
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={card.image}
+          alt={card.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <span className="absolute bottom-4 left-4 font-mono-spec text-white text-xs text-uppercase tracking-wider bg-gpro-accent/90 px-3 py-1">
           {card.capacity}
         </span>
-        <h3 className="font-display text-gpro-dark text-xl font-semibold mt-2 mb-3">
+      </div>
+      <div className="p-6">
+        <h3 className="font-display text-gpro-dark text-xl font-semibold mt-0 mb-3">
           {card.title}
         </h3>
-        <p className="font-mono-spec text-gpro-dark text-sm font-medium mb-3">
+        <p className="font-mono-spec text-gpro-accent text-sm font-semibold mb-3">
           {card.surface}
         </p>
         <p className="text-muted-foreground text-sm leading-relaxed mb-4">

@@ -6,7 +6,10 @@ import { useRouter } from '@/lib/router';
 import Navbar from '@/components/public/Navbar';
 import Hero from '@/components/public/Hero';
 import WarehouseCards from '@/components/public/WarehouseCards';
+import WhyGpro from '@/components/public/WhyGpro';
+import ResidentialSection from '@/components/public/ResidentialSection';
 import ZonesSection from '@/components/public/ZonesSection';
+import CtaSection from '@/components/public/CtaSection';
 import Contact from '@/components/public/Contact';
 import Footer from '@/components/public/Footer';
 
@@ -57,7 +60,10 @@ function HomePage() {
     <>
       <Hero />
       <WarehouseCards />
+      <WhyGpro />
+      <ResidentialSection />
       <ZonesSection />
+      <CtaSection />
     </>
   );
 }
