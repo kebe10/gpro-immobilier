@@ -7,6 +7,7 @@ import Navbar from '@/components/public/Navbar';
 import Hero from '@/components/public/Hero';
 import WarehouseCards from '@/components/public/WarehouseCards';
 import ZonesSection from '@/components/public/ZonesSection';
+import Contact from '@/components/public/Contact';
 import Footer from '@/components/public/Footer';
 
 // Catalog
@@ -38,6 +39,8 @@ export default function AppPage() {
         {page === 'entrepot-detail' && <EntrepotDetail />}
         {page === 'villas' && <VillaCatalog />}
         {page === 'villa-detail' && <VillaDetail />}
+        {page === 'zones' && <ZonesPage />}
+        {page === 'contact' && <Contact />}
         {page === 'admin-login' && <AdminLogin />}
         {page === 'admin-dashboard' && <AdminDashboard />}
         {page === 'admin-entrepot-form' && <EntrepotForm />}
@@ -54,6 +57,24 @@ function HomePage() {
     <>
       <Hero />
       <WarehouseCards />
+      <ZonesSection />
+    </>
+  );
+}
+
+function ZonesPage() {
+  return (
+    <>
+      <div className="bg-gpro-cream py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-display text-gpro-dark text-3xl md:text-4xl font-bold text-uppercase text-center mb-4">
+            Zones desservies
+          </h2>
+          <p className="text-center text-gpro-dark/60 max-w-xl mx-auto mb-14">
+            GPRO Immobilier est présent dans les principales communes d&rsquo;Abidjan pour vous offrir un service de proximité.
+          </p>
+        </div>
+      </div>
       <ZonesSection />
     </>
   );

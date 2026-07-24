@@ -1,14 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, X, Warehouse, Home, Shield } from 'lucide-react';
+import { Menu, X, Warehouse, Building2, MapPin, Phone } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import type { Page } from '@/lib/router';
 
 const navLinks: { label: string; page: Page; icon: React.ReactNode }[] = [
-  { label: 'Accueil', page: 'home', icon: <Home className="h-4 w-4" /> },
   { label: 'Entrepôts', page: 'entrepots', icon: <Warehouse className="h-4 w-4" /> },
-  { label: 'Villas', page: 'villas', icon: <Home className="h-4 w-4" /> },
+  { label: 'Zones desservies', page: 'zones', icon: <MapPin className="h-4 w-4" /> },
+  { label: 'Résidentiel', page: 'villas', icon: <Building2 className="h-4 w-4" /> },
+  { label: 'Contact', page: 'contact', icon: <Phone className="h-4 w-4" /> },
 ];
 
 export default function Navbar() {
@@ -54,14 +55,6 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
-            <div className="w-px h-6 bg-white/10 mx-2" />
-            <button
-              onClick={() => handleNavigate('admin-login')}
-              className="px-4 py-2 text-sm font-display text-uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/5 transition-colors rounded-sm flex items-center gap-2"
-            >
-              <Shield className="h-4 w-4" />
-              Admin
-            </button>
           </div>
 
           {/* Mobile hamburger */}
@@ -118,14 +111,6 @@ export default function Navbar() {
                 {link.label}
               </button>
             ))}
-            <div className="w-24 h-px bg-white/10 my-4" />
-            <button
-              onClick={() => handleNavigate('admin-login')}
-              className="w-full max-w-xs px-6 py-4 text-lg font-display text-uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/5 rounded-sm flex items-center gap-4 transition-colors"
-            >
-              <Shield className="h-5 w-5" />
-              Admin
-            </button>
           </div>
         </div>
       )}

@@ -6,6 +6,8 @@ type Page =
   | 'entrepot-detail'
   | 'villas'
   | 'villa-detail'
+  | 'zones'
+  | 'contact'
   | 'admin-login'
   | 'admin-dashboard'
   | 'admin-entrepot-form'

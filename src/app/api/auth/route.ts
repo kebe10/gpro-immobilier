@@ -65,10 +65,10 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Code secret invalide' }, { status: 403 });
     }
 
-    // Vérifier qu'aucun admin n'existe déjà (sécurité : un seul admin)
-    const existing = await db.adminUser.findFirst();
+    // Vérifier si un admin avec cet email existe déjà
+    const existing = await db.adminUser.findUnique({ where: { email } });
     if (existing) {
-      return NextResponse.json({ error: 'Un compte administrateur existe déjà. Connectez-vous ou contactez le support.' }, { status: 409 });
+      return NextResponse.json({ error: 'Un compte avec cet email existe déjà.' }, { status: 409 });
     }
 
     const admin = await createAdmin(email, password, name);

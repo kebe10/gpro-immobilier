@@ -1,13 +1,14 @@
 'use client';
 
-import { Phone, MessageCircle } from 'lucide-react';
+import { Phone, MessageCircle, Shield } from 'lucide-react';
 import { useRouter } from '@/lib/router';
 import type { Page } from '@/lib/router';
 
 const links: { label: string; page: Page }[] = [
-  { label: 'Accueil', page: 'home' },
   { label: 'Entrepôts', page: 'entrepots' },
-  { label: 'Villas', page: 'villas' },
+  { label: 'Zones desservies', page: 'zones' },
+  { label: 'Résidentiel', page: 'villas' },
+  { label: 'Contact', page: 'contact' },
 ];
 
 export default function Footer() {
@@ -82,10 +83,17 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 mt-10 pt-6 text-center">
+        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gpro-muted text-xs">
             &copy; 2025 GPRO Immobilier. Tous droits réservés.
           </p>
+          <button
+            onClick={() => navigate('admin-login')}
+            className="flex items-center gap-1.5 text-white/20 hover:text-white/40 text-xs transition-colors"
+          >
+            <Shield className="h-3 w-3" />
+            Administration
+          </button>
         </div>
       </div>
     </footer>
