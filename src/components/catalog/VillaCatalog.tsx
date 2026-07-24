@@ -83,7 +83,7 @@ export default function VillaCatalog() {
     <div className="min-h-screen pt-24 pb-16 px-4 max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="font-display text-uppercase text-3xl md:text-4xl text-gpro-dark">
-          NOS VILLAS
+          NOS BIENS RÉSIDENTIELS
         </h1>
         <p className="text-muted-foreground mt-2">
           Villas résidentielles à louer dans les meilleurs quartiers d'Abidjan
@@ -131,7 +131,7 @@ export default function VillaCatalog() {
       {filtered.length === 0 ? (
         <div className="text-center py-20">
           <Home className="w-16 h-16 text-gpro-muted mx-auto mb-4" />
-          <p className="text-muted-foreground text-lg">Aucune villa trouvée</p>
+          <p className="text-muted-foreground text-lg">Aucun bien résidentiel trouvé</p>
           <p className="text-gpro-muted text-sm mt-1">
             Modifiez vos filtres ou consultez-nous directement
           </p>

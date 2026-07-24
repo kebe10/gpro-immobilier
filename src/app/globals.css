@@ -42,6 +42,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-gpro-cream: #f5f0e8;
   --color-gpro-dark: #17130f;
   --color-gpro-accent: #d6431e;
   --color-gpro-light: #ede8e0;
