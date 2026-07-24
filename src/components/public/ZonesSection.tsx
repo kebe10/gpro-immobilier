@@ -18,23 +18,28 @@ const zones = [
   'Anyama',
 ];
 
-export default function ZonesSection() {
+export default function ZonesSection({ showTitle = true }: { showTitle?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
     <section className="bg-gpro-dark py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.h2
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
-          className="font-display text-white text-3xl md:text-4xl font-bold text-uppercase text-center mb-14"
+        {showTitle && (
+          <motion.h2
+            ref={ref}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
+            className="font-display text-white text-3xl md:text-4xl font-bold text-uppercase text-center mb-14"
+          >
+            Zones desservies
+          </motion.h2>
+        )}
+        <div
+          ref={showTitle ? undefined : ref}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6"
         >
-          Zones desservies
-        </motion.h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
           {zones.map((zone, index) => (
             <motion.div
               key={zone}

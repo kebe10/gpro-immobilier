@@ -71,17 +71,17 @@ function HomePage() {
 function ZonesPage() {
   return (
     <>
-      <div className="bg-gpro-cream py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-display text-gpro-dark text-3xl md:text-4xl font-bold text-uppercase text-center mb-4">
+      <div className="bg-gpro-cream min-h-[40vh] flex flex-col items-center justify-center py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-gpro-dark text-3xl md:text-4xl font-bold text-uppercase mb-4">
             Zones desservies
           </h2>
-          <p className="text-center text-gpro-dark/60 max-w-xl mx-auto mb-14">
-            GPRO Immobilier est présent dans les principales communes d&rsquo;Abidjan pour vous offrir un service de proximité.
+          <p className="text-gpro-dark/60 max-w-2xl mx-auto">
+            GPRO Immobilier est présent dans les principales communes d&rsquo;Abidjan pour vous offrir un service de proximité. Que vous cherchiez un entrepôt logistique ou une villa résidentielle, nous avons un bien adapté dans votre zone de prédilection.
           </p>
         </div>
       </div>
-      <ZonesSection />
+      <ZonesSection showTitle={false} />
     </>
   );
 }
