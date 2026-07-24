@@ -42,15 +42,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-gpro-muted text-sm">
                 <Phone className="h-4 w-4 shrink-0 text-gpro-accent" />
-                <span>+225 07 00 00 00 00</span>
+                <span>+225 07 77 04 10 10</span>
               </li>
               <li className="flex items-center gap-3 text-gpro-muted text-sm">
                 <Phone className="h-4 w-4 shrink-0 text-gpro-accent" />
-                <span>+225 01 00 00 00 00</span>
+                <span>+225 05 94 24 99 33</span>
               </li>
               <li>
                 <a
-                  href="https://wa.me/2250700000000"
+                  href="https://wa.me/2250777041010"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-gpro-muted text-sm hover:text-white transition-colors"

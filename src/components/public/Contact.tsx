@@ -8,20 +8,20 @@ const contacts = [
   {
     icon: <Phone className="h-5 w-5" />,
     label: 'Téléphone',
-    value: '+225 07 00 00 00 00',
-    href: 'tel:+2250700000000',
+    value: '+225 07 77 04 10 10',
+    href: 'tel:+2250777041010',
   },
   {
     icon: <Phone className="h-5 w-5" />,
     label: 'Téléphone',
-    value: '+225 01 00 00 00 00',
-    href: 'tel:+2250100000000',
+    value: '+225 05 94 24 99 33',
+    href: 'tel:+2250594249933',
   },
   {
     icon: <MessageCircle className="h-5 w-5" />,
     label: 'WhatsApp',
     value: 'WhatsApp Direct',
-    href: 'https://wa.me/2250700000000',
+    href: 'https://wa.me/2250777041010',
   },
   {
     icon: <Mail className="h-5 w-5" />,

@@ -69,7 +69,7 @@ export default function Hero() {
                 <ChevronRight className="h-4 w-4" />
               </button>
               <a
-                href="https://wa.me/2250700000000"
+                href="https://wa.me/2250777041010"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 border-2 border-white/30 text-white px-8 py-4 font-display text-uppercase text-sm tracking-wider hover:bg-white hover:text-gpro-dark transition-colors"
