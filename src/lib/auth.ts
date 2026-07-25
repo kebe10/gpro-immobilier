@@ -1,8 +1,10 @@
 import { db } from './db';
-import { createHash, randomBytes } from 'crypto';
+import { createHash } from 'crypto';
+import { SignJWT, jwtVerify } from 'jose';
 
-// Simple token-based auth (no external deps needed)
-const sessions = new Map<string, { userId: string; expires: number }>();
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'gpro-immobilier-jwt-secret-2026'
+);
 
 function hashPassword(password: string): string {
   return createHash('sha256').update(password).digest('hex');
@@ -21,20 +23,24 @@ export async function loginAdmin(email: string, password: string) {
   if (!user || user.passwordHash !== hashPassword(password)) {
     return null;
   }
-  const token = randomBytes(32).toString('hex');
-  sessions.set(token, { userId: user.id, expires: Date.now() + 24 * 60 * 60 * 1000 });
+  const token = await new SignJWT({ userId: user.id, email: user.email })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d')
+    .sign(JWT_SECRET);
   return { token, user: { id: user.id, email: user.email, name: user.name } };
 }
 
-export function verifyToken(token: string) {
-  const session = sessions.get(token);
-  if (!session || session.expires < Date.now()) {
-    sessions.delete(token);
+export async function verifyToken(token: string) {
+  try {
+    const { payload } = await jwtVerify(token, JWT_SECRET);
+    return { userId: payload.userId as string };
+  } catch {
     return null;
   }
-  return { userId: session.userId };
 }
 
-export function invalidateToken(token: string) {
-  sessions.delete(token);
+export function invalidateToken(_token: string) {
+  // JWT stateless - no server-side invalidation needed
+  // Token expiry is handled by the JWT expiration claim
 }
