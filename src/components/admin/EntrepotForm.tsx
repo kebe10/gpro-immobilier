@@ -87,25 +87,50 @@ export default function EntrepotForm() {
     setSaving(true);
 
     try {
-      const formData = new FormData();
-      formData.append('titre', form.titre);
-      formData.append('zone', form.zone);
-      formData.append('surface', form.surface);
-      formData.append('gamme', form.gamme);
-      formData.append('typeMarchandise', form.typeMarchandise);
-      formData.append('typeAcces', form.typeAcces);
-      formData.append('statut', form.statut);
-      formData.append('photos', JSON.stringify(existingPhotos));
-      newFiles.forEach((f) => formData.append('files', f));
-
       const url = isEdit ? `/api/entrepots/${editId}` : '/api/entrepots';
       const method = isEdit ? 'PUT' : 'POST';
+      let res: Response;
 
-      const res = await fetch(url, {
-        method,
-        headers: { Authorization: `Bearer ${tokenRef.current}` },
-        body: formData,
-      });
+      if (newFiles.length > 0) {
+        // Nouveaux fichiers : envoyer en multipart/form-data
+        const formData = new FormData();
+        formData.append('titre', form.titre);
+        formData.append('zone', form.zone);
+        formData.append('surface', form.surface);
+        formData.append('gamme', form.gamme);
+        formData.append('typeMarchandise', form.typeMarchandise);
+        formData.append('typeAcces', form.typeAcces);
+        formData.append('statut', form.statut);
+        formData.append('photos', JSON.stringify(existingPhotos));
+        newFiles.forEach((f) => formData.append('files', f));
+
+        res = await fetch(url, {
+          method,
+          headers: { Authorization: `Bearer ${tokenRef.current}` },
+          body: formData,
+        });
+      } else {
+        // Pas de nouveaux fichiers : envoyer en JSON (compatible Vercel)
+        const body: Record<string, unknown> = {
+          titre: form.titre,
+          zone: form.zone,
+          surface: parseInt(form.surface, 10) || 0,
+          gamme: form.gamme,
+          typeMarchandise: form.typeMarchandise,
+          typeAcces: form.typeAcces,
+          statut: form.statut,
+          photos: JSON.stringify(existingPhotos),
+        };
+
+        res = await fetch(url, {
+          method,
+          headers: {
+            Authorization: `Bearer ${tokenRef.current}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+      }
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));

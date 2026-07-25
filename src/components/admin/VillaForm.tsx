@@ -84,24 +84,48 @@ export default function VillaForm() {
     setSaving(true);
 
     try {
-      const formData = new FormData();
-      formData.append('titre', form.titre);
-      formData.append('quartier', form.quartier);
-      formData.append('pieces', form.pieces);
-      formData.append('description', form.description);
-      formData.append('prix', form.prix);
-      formData.append('statut', form.statut);
-      formData.append('photos', JSON.stringify(existingPhotos));
-      newFiles.forEach((f) => formData.append('files', f));
-
       const url = isEdit ? `/api/villas/${editId}` : '/api/villas';
       const method = isEdit ? 'PUT' : 'POST';
+      let res: Response;
 
-      const res = await fetch(url, {
-        method,
-        headers: { Authorization: `Bearer ${tokenRef.current}` },
-        body: formData,
-      });
+      if (newFiles.length > 0) {
+        // Nouveaux fichiers : envoyer en multipart/form-data
+        const formData = new FormData();
+        formData.append('titre', form.titre);
+        formData.append('quartier', form.quartier);
+        formData.append('pieces', form.pieces);
+        formData.append('description', form.description);
+        formData.append('prix', form.prix);
+        formData.append('statut', form.statut);
+        formData.append('photos', JSON.stringify(existingPhotos));
+        newFiles.forEach((f) => formData.append('files', f));
+
+        res = await fetch(url, {
+          method,
+          headers: { Authorization: `Bearer ${tokenRef.current}` },
+          body: formData,
+        });
+      } else {
+        // Pas de nouveaux fichiers : envoyer en JSON (compatible Vercel)
+        const body: Record<string, unknown> = {
+          titre: form.titre,
+          quartier: form.quartier,
+          pieces: parseInt(form.pieces, 10) || 0,
+          description: form.description,
+          prix: form.prix,
+          statut: form.statut,
+          photos: JSON.stringify(existingPhotos),
+        };
+
+        res = await fetch(url, {
+          method,
+          headers: {
+            Authorization: `Bearer ${tokenRef.current}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+      }
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));

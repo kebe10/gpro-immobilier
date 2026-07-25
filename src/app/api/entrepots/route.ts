@@ -36,12 +36,9 @@ export async function GET(request: NextRequest) {
 }
 
 async function saveUploadedFiles(formData: FormData): Promise<string> {
-  const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-  await mkdir(uploadsDir, { recursive: true });
-
   const urls: string[] = [];
 
-  // Check for existing photo URLs passed as JSON string
+  // Extraire les photos existantes (URLs)
   const existingPhotos = formData.get('photos');
   if (existingPhotos && typeof existingPhotos === 'string') {
     try {
@@ -54,17 +51,23 @@ async function saveUploadedFiles(formData: FormData): Promise<string> {
     }
   }
 
-  // Process uploaded files
-  const files = formData.getAll('files');
-  for (const file of files) {
-    if (file instanceof File) {
-      const ext = path.extname(file.name) || '.png';
-      const filename = `${randomUUID()}${ext}`;
-      const filepath = path.join(uploadsDir, filename);
-      const buffer = Buffer.from(await file.arrayBuffer());
-      await writeFile(filepath, buffer);
-      urls.push(`/uploads/${filename}`);
+  // Tenter d'écrire les nouveaux fichiers (échoue silencieusement sur Vercel)
+  try {
+    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+    await mkdir(uploadsDir, { recursive: true });
+    const files = formData.getAll('files');
+    for (const file of files) {
+      if (file instanceof File) {
+        const ext = path.extname(file.name) || '.png';
+        const filename = `${randomUUID()}${ext}`;
+        const filepath = path.join(uploadsDir, filename);
+        const buffer = Buffer.from(await file.arrayBuffer());
+        await writeFile(filepath, buffer);
+        urls.push(`/uploads/${filename}`);
+      }
     }
+  } catch {
+    // Vercel filesystem est en lecture seule, on ignore l'erreur d'upload
   }
 
   return JSON.stringify(urls);
