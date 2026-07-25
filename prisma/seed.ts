@@ -127,6 +127,46 @@ async function main() {
     await db.villa.create({ data: v });
   }
   console.log(`${villas.length} villas créées`);
+
+  const avisData = [
+    {
+      nom: 'Aminata K.',
+      fonction: 'Locataire entrepôt Yopougon',
+      texte: 'GPRO Immobilier a su comprendre nos besoins en espace de stockage. L\'entrepôt de Yopougon est parfaitement adapté à notre activité logistique. La réactivité de l\'équipe et la transparence des contrats sont vraiment appréciables.',
+      note: 5,
+      ordre: 0,
+      active: true,
+    },
+    {
+      nom: 'Ibrahim T.',
+      fonction: 'Gérant société import-export',
+      texte: 'Nous cherchions un entrepôt proche du port de Vridi et GPRO nous a trouvé exactement ce qu\'il fallait en moins de 48h. Service professionnel et accompagnement de A à Z.',
+      note: 5,
+      ordre: 1,
+      active: true,
+    },
+    {
+      nom: 'Fatoumata D.',
+      fonction: 'Locataire villa Cocody',
+      texte: 'La villa mise à disposition est exactement conforme aux photos. Le quartier est calme et sécurisé, parfait pour notre famille. Je recommande vivement GPRO pour la recherche de biens résidentiels.',
+      note: 4,
+      ordre: 2,
+      active: true,
+    },
+    {
+      nom: 'Jean-Marc A.',
+      fonction: 'Directeur logistique, Abidjan',
+      texte: 'Après avoir visité plusieurs offres, c\'est chez GPRO que nous avons trouvé le meilleur rapport qualité-prix pour notre entrepôt de stockage à Koumassi. Un partenaire fiable.',
+      note: 5,
+      ordre: 3,
+      active: true,
+    },
+  ];
+
+  for (const a of avisData) {
+    await db.avis.create({ data: a });
+  }
+  console.log(`${avisData.length} avis créés`);
 }
 
 main()

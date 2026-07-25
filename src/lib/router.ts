@@ -11,7 +11,8 @@ type Page =
   | 'admin-login'
   | 'admin-dashboard'
   | 'admin-entrepot-form'
-  | 'admin-villa-form';
+  | 'admin-villa-form'
+  | 'admin-avis-form';
 
 interface RouterState {
   page: Page;

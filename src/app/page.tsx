@@ -10,6 +10,7 @@ import WhyGpro from '@/components/public/WhyGpro';
 import ResidentialSection from '@/components/public/ResidentialSection';
 import ZonesSection from '@/components/public/ZonesSection';
 import CtaSection from '@/components/public/CtaSection';
+import Testimonials from '@/components/public/Testimonials';
 import Contact from '@/components/public/Contact';
 import Footer from '@/components/public/Footer';
 
@@ -24,6 +25,7 @@ import AdminLogin from '@/components/admin/AdminLogin';
 import AdminDashboard from '@/components/admin/AdminDashboard';
 import EntrepotForm from '@/components/admin/EntrepotForm';
 import VillaForm from '@/components/admin/VillaForm';
+import AvisForm from '@/components/admin/AvisForm';
 
 export default function AppPage() {
   const { page } = useRouter();
@@ -48,6 +50,7 @@ export default function AppPage() {
         {page === 'admin-dashboard' && <AdminDashboard />}
         {page === 'admin-entrepot-form' && <EntrepotForm />}
         {page === 'admin-villa-form' && <VillaForm />}
+        {page === 'admin-avis-form' && <AvisForm />}
       </main>
 
       {showNav && <Footer />}
@@ -63,6 +66,7 @@ function HomePage() {
       <WhyGpro />
       <ResidentialSection />
       <ZonesSection />
+      <Testimonials />
       <CtaSection />
     </>
   );
