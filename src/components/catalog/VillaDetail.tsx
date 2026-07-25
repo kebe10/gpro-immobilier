@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from '@/lib/router';
-import { ArrowLeft, Home, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Home, MessageCircle, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -34,6 +34,8 @@ export default function VillaDetail() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [activePhoto, setActivePhoto] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
+
 
   useEffect(() => {
     if (!id || initialized.current) return;
@@ -78,6 +80,15 @@ export default function VillaDetail() {
   }
 
   const photos = parsePhotos(villa.photos);
+  const safePhoto = photos.length > 0 ? activePhoto % photos.length : 0;
+
+  const prevPhoto = () => {
+    setActivePhoto((p) => (p === 0 ? photos.length - 1 : p - 1));
+  };
+
+  const nextPhoto = () => {
+    setActivePhoto((p) => (p === photos.length - 1 ? 0 : p + 1));
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 max-w-5xl mx-auto">
@@ -91,33 +102,94 @@ export default function VillaDetail() {
 
       {photos.length > 0 ? (
         <div className="mb-8">
-          <div className="h-64 md:h-96 bg-gpro-dark overflow-hidden">
+          {/* Main image */}
+          <div
+            className="relative w-full bg-gpro-dark overflow-hidden cursor-pointer group"
+            style={{ aspectRatio: '16/9' }}
+            onClick={() => setLightbox(true)}
+          >
             <img
-              src={photos[activePhoto]}
+              src={photos[safePhoto]}
               alt={villa.titre}
               className="w-full h-full object-cover"
             />
+            {photos.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); prevPhoto(); }}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-10 h-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); nextPhoto(); }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-10 h-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
+            <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-1 font-mono-spec">
+              {safePhoto + 1} / {photos.length}
+            </div>
           </div>
+          {/* Thumbnails */}
           {photos.length > 1 && (
-            <div className="flex gap-2 mt-3 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-3 mt-4 overflow-x-auto pb-1">
               {photos.map((p, i) => (
                 <button
                   key={i}
                   onClick={() => setActivePhoto(i)}
-                  className={`flex-shrink-0 w-20 h-16 overflow-hidden border-2 transition-colors ${
-                    i === activePhoto
-                      ? 'border-gpro-accent'
-                      : 'border-transparent opacity-60 hover:opacity-100'
+                  className={`flex-shrink-0 overflow-hidden border-2 transition-all ${
+                    i === safePhoto
+                      ? 'border-gpro-accent opacity-100'
+                      : 'border-transparent opacity-50 hover:opacity-80'
                   }`}
+                  style={{ width: '100px', height: '72px' }}
                 >
                   <img src={p} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
           )}
+          {/* Lightbox */}
+          {lightbox && (
+            <div
+              className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+              onClick={() => setLightbox(false)}
+            >
+              <button
+                onClick={() => setLightbox(false)}
+                className="absolute top-4 right-4 text-white/70 hover:text-white z-10"
+              >
+                <X className="w-8 h-8" />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); prevPhoto(); }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white w-12 h-12 flex items-center justify-center"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <img
+                src={photos[safePhoto]}
+                alt={villa.titre}
+                className="max-w-[90vw] max-h-[85vh] object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <button
+                onClick={(e) => { e.stopPropagation(); nextPhoto(); }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white w-12 h-12 flex items-center justify-center"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/10 text-white text-sm px-3 py-1 font-mono-spec">
+                {safePhoto + 1} / {photos.length}
+              </div>
+            </div>
+          )}
         </div>
       ) : (
-        <div className="h-64 md:h-96 bg-gpro-dark flex items-center justify-center mb-8">
+        <div className="mb-8 bg-gpro-dark flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
           <Home className="w-16 h-16 text-gpro-muted" />
         </div>
       )}
