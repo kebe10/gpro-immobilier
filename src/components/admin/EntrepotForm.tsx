@@ -24,6 +24,39 @@ const emptyForm: EntrepotData = {
   statut: 'disponible',
 };
 
+// Convertir un File en base64 data URL avec compression
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// Redimensionner et compresser une image avant base64
+function compressImage(file: File, maxWidth = 1200, quality = 0.75): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let { width, height } = img;
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) { reject(new Error('Canvas non supporte')); return; }
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 export default function EntrepotForm() {
   const { params, navigate } = useRouter();
   const editId = params.id;
@@ -31,11 +64,10 @@ export default function EntrepotForm() {
 
   const tokenRef = useRef('');
   const [form, setForm] = useState<EntrepotData>(emptyForm);
-  const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
-  const [newFiles, setNewFiles] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const t = localStorage.getItem('gpro_token');
@@ -59,26 +91,32 @@ export default function EntrepotForm() {
           statut: e.statut,
         });
         try {
-          const photos = JSON.parse(e.photos);
-          if (Array.isArray(photos)) setExistingPhotos(photos);
+          const parsed = JSON.parse(e.photos);
+          if (Array.isArray(parsed)) setPhotos(parsed);
         } catch { /* empty */ }
       });
   }, [editId, navigate]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    setNewFiles((prev) => [...prev, ...files]);
-    const newPreviews = files.map((f) => URL.createObjectURL(f));
-    setPreviews((prev) => [...prev, ...newPreviews]);
+    if (files.length === 0) return;
+    setUploading(true);
+    try {
+      // Compresser et convertir chaque fichier en base64
+      const base64List = await Promise.all(
+        files.map((f) => compressImage(f))
+      );
+      setPhotos((prev) => [...prev, ...base64List]);
+    } catch {
+      setError('Erreur lors du traitement des images');
+    }
+    setUploading(false);
+    // Reset l'input pour pouvoir re-sélectionner le même fichier
+    e.target.value = '';
   };
 
-  const removeNewFile = (index: number) => {
-    setNewFiles((prev) => prev.filter((_, i) => i !== index));
-    setPreviews((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const removeExistingPhoto = (index: number) => {
-    setExistingPhotos((prev) => prev.filter((_, i) => i !== index));
+  const removePhoto = (index: number) => {
+    setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -89,48 +127,27 @@ export default function EntrepotForm() {
     try {
       const url = isEdit ? `/api/entrepots/${editId}` : '/api/entrepots';
       const method = isEdit ? 'PUT' : 'POST';
-      let res: Response;
 
-      if (newFiles.length > 0) {
-        // Nouveaux fichiers : envoyer en multipart/form-data
-        const formData = new FormData();
-        formData.append('titre', form.titre);
-        formData.append('zone', form.zone);
-        formData.append('surface', form.surface);
-        formData.append('gamme', form.gamme);
-        formData.append('typeMarchandise', form.typeMarchandise);
-        formData.append('typeAcces', form.typeAcces);
-        formData.append('statut', form.statut);
-        formData.append('photos', JSON.stringify(existingPhotos));
-        newFiles.forEach((f) => formData.append('files', f));
+      // Toujours envoyer en JSON - les images sont en base64
+      const body: Record<string, unknown> = {
+        titre: form.titre,
+        zone: form.zone,
+        surface: parseInt(form.surface, 10) || 0,
+        gamme: form.gamme,
+        typeMarchandise: form.typeMarchandise,
+        typeAcces: form.typeAcces,
+        statut: form.statut,
+        photos: JSON.stringify(photos),
+      };
 
-        res = await fetch(url, {
-          method,
-          headers: { Authorization: `Bearer ${tokenRef.current}` },
-          body: formData,
-        });
-      } else {
-        // Pas de nouveaux fichiers : envoyer en JSON (compatible Vercel)
-        const body: Record<string, unknown> = {
-          titre: form.titre,
-          zone: form.zone,
-          surface: parseInt(form.surface, 10) || 0,
-          gamme: form.gamme,
-          typeMarchandise: form.typeMarchandise,
-          typeAcces: form.typeAcces,
-          statut: form.statut,
-          photos: JSON.stringify(existingPhotos),
-        };
-
-        res = await fetch(url, {
-          method,
-          headers: {
-            Authorization: `Bearer ${tokenRef.current}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        });
-      }
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${tokenRef.current}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -161,7 +178,7 @@ export default function EntrepotForm() {
         </button>
 
         <h1 className="font-display text-uppercase text-2xl text-white mb-8">
-          {isEdit ? 'MODIFIER L\'ENTREPÔT' : 'NOUVEL ENTREPÔT'}
+          {isEdit ? "MODIFIER L'ENTREPÔT" : 'NOUVEL ENTREPÔT'}
         </h1>
 
         {error && (
@@ -264,8 +281,8 @@ export default function EntrepotForm() {
           <div>
             <label className={labelClass}>Photos</label>
             <div className="flex flex-wrap gap-3 mt-2">
-              {existingPhotos.map((p, i) => (
-                <div key={`ex-${i}`} className="relative w-24 h-20">
+              {photos.map((p, i) => (
+                <div key={`photo-${i}`} className="relative w-24 h-20">
                   <img
                     src={p}
                     alt=""
@@ -273,23 +290,7 @@ export default function EntrepotForm() {
                   />
                   <button
                     type="button"
-                    onClick={() => removeExistingPhoto(i)}
-                    className="absolute -top-2 -right-2 bg-red-600 text-white w-5 h-5 flex items-center justify-center rounded-full"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-              {previews.map((p, i) => (
-                <div key={`new-${i}`} className="relative w-24 h-20">
-                  <img
-                    src={p}
-                    alt=""
-                    className="w-full h-full object-cover border border-gpro-accent"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeNewFile(i)}
+                    onClick={() => removePhoto(i)}
                     className="absolute -top-2 -right-2 bg-red-600 text-white w-5 h-5 flex items-center justify-center rounded-full"
                   >
                     <X className="w-3 h-3" />
@@ -297,8 +298,14 @@ export default function EntrepotForm() {
                 </div>
               ))}
               <label className="w-24 h-20 border-2 border-dashed border-white/20 flex flex-col items-center justify-center cursor-pointer hover:border-gpro-accent transition-colors">
-                <Upload className="w-5 h-5 text-gpro-muted" />
-                <span className="text-gpro-muted text-xs mt-1">Ajouter</span>
+                {uploading ? (
+                  <span className="text-gpro-accent text-xs">Traitement...</span>
+                ) : (
+                  <>
+                    <Upload className="w-5 h-5 text-gpro-muted" />
+                    <span className="text-gpro-muted text-xs mt-1">Ajouter</span>
+                  </>
+                )}
                 <input
                   type="file"
                   accept="image/*"
@@ -316,7 +323,7 @@ export default function EntrepotForm() {
             className="flex items-center gap-2 bg-gpro-accent text-white px-6 py-3 font-display text-uppercase hover:bg-gpro-accent/80 transition-colors disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
-            {saving ? 'Enregistrement...' : isEdit ? 'METTRE À JOUR' : 'CRÉER L\'ENTREPÔT'}
+            {saving ? 'Enregistrement...' : isEdit ? "METTRE À JOUR" : "CRÉER L'ENTREPÔT"}
           </button>
         </form>
       </div>
