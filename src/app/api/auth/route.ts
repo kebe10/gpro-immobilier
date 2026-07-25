@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     }
 
     const token = authHeader.replace('Bearer ', '');
-    const session = verifyToken(token);
+    const session = await verifyToken(token);
     if (!session) {
       return NextResponse.json({ error: 'Token invalide ou expiré' }, { status: 401 });
     }

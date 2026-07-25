@@ -79,7 +79,7 @@ function extractBearerToken(request: NextRequest): string | null {
 export async function POST(request: NextRequest) {
   try {
     const token = extractBearerToken(request);
-    if (!token || !verifyToken(token)) {
+    if (!token || !await verifyToken(token)) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
 

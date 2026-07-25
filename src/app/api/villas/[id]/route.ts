@@ -53,7 +53,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const { id } = await params;
     const token = extractBearerToken(request);
-    if (!token || !verifyToken(token)) {
+    if (!token || !await verifyToken(token)) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
     const existing = await db.villa.findUnique({ where: { id } });
@@ -91,7 +91,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   try {
     const { id } = await params;
     const token = extractBearerToken(request);
-    if (!token || !verifyToken(token)) {
+    if (!token || !await verifyToken(token)) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
     const existing = await db.villa.findUnique({ where: { id } });
