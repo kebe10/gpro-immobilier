@@ -20,14 +20,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
           {/* Col 1: Logo & description */}
           <div>
-            <div className="flex items-baseline gap-1 mb-4">
-              <span className="font-display text-gpro-accent text-xl font-bold tracking-wider">
-                GPRO
-              </span>
-              <span className="text-white text-xs font-medium tracking-widest uppercase">
-                Immobilier
-              </span>
-            </div>
+            <img
+              src="/images/logo-gpro.png"
+              alt="GPRO Immobilier"
+              className="h-10 w-auto object-contain mb-4"
+            />
             <p className="text-gpro-muted text-sm leading-relaxed max-w-xs">
               Votre partenaire pour la location d&rsquo;entrepôts et de villas à
               Abidjan, Côte d&rsquo;Ivoire.

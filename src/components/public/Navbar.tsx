@@ -28,15 +28,14 @@ export default function Navbar() {
           {/* Logo */}
           <button
             onClick={() => handleNavigate('home')}
-            className="flex items-baseline gap-1 hover:opacity-80 transition-opacity"
+            className="flex items-center hover:opacity-80 transition-opacity"
             aria-label="Retour à l'accueil"
           >
-            <span className="font-display text-gpro-accent text-2xl font-bold tracking-wider">
-              GPRO
-            </span>
-            <span className="text-white text-xs font-medium tracking-widest uppercase">
-              Immobilier
-            </span>
+            <img
+              src="/images/logo-gpro.png"
+              alt="GPRO Immobilier"
+              className="h-9 w-auto object-contain"
+            />
           </button>
 
           {/* Desktop nav links */}
@@ -78,13 +77,12 @@ export default function Navbar() {
         >
           {/* Close button */}
           <div className="flex items-center justify-between px-4 h-16 border-b border-white/10">
-            <div className="flex items-baseline gap-1">
-              <span className="font-display text-gpro-accent text-2xl font-bold tracking-wider">
-                GPRO
-              </span>
-              <span className="text-white text-xs font-medium tracking-widest uppercase">
-                Immobilier
-              </span>
+            <div className="flex items-center">
+              <img
+                src="/images/logo-gpro.png"
+                alt="GPRO Immobilier"
+                className="h-9 w-auto object-contain"
+              />
             </div>
             <button
               onClick={() => setMobileOpen(false)}

@@ -91,6 +91,11 @@ export default function AdminLogin() {
         </button>
 
         <div className="mb-8">
+          <img
+            src="/images/logo-gpro.png"
+            alt="GPRO Immobilier"
+            className="h-10 w-auto object-contain mb-4"
+          />
           <h1 className="font-display text-uppercase text-3xl text-white">
             ESPACE ADMIN
           </h1>
