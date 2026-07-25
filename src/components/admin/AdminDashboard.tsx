@@ -156,7 +156,7 @@ export default function AdminDashboard() {
     const cls =
       statut === 'disponible'
         ? 'bg-green-600 hover:bg-green-700 text-white'
-        : statut === 'lou\u00e9'
+        : statut === 'loué'
         ? 'bg-red-600 hover:bg-red-700 text-white'
         : 'bg-yellow-600 hover:bg-yellow-700 text-white';
     return <Badge className={cls}>{statut}</Badge>;
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
               className="flex items-center gap-2 text-gpro-muted hover:text-gpro-dark transition-colors font-display text-uppercase text-sm"
             >
               <LogOut className="w-4 h-4" />
-              D\u00e9connexion
+              Déconnexion
             </button>
         </div>
 
@@ -198,7 +198,7 @@ export default function AdminDashboard() {
             }`}
           >
             <Warehouse className="w-4 h-4" />
-            Entrep\u00f4ts ({entrepots.length})
+            Entrepôts ({entrepots.length})
           </button>
           <button
             onClick={() => setActiveTab('villas')}
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
             }`}
           >
             <Home className="w-4 h-4" />
-            R\u00e9sidentiel ({villas.length})
+            Résidentiel ({villas.length})
           </button>
           <button
             onClick={() => setActiveTab('avis')}
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
               className="flex items-center gap-2 bg-gpro-accent text-white px-4 py-2 font-display text-uppercase text-sm hover:bg-gpro-accent/80 transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Ajouter un entrep\u00f4t
+              Ajouter un entrepôt
             </button>
           </div>
         )}
@@ -243,7 +243,7 @@ export default function AdminDashboard() {
               className="flex items-center gap-2 bg-gpro-accent text-white px-4 py-2 font-display text-uppercase text-sm hover:bg-gpro-accent/80 transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Ajouter un bien r\u00e9sidentiel
+              Ajouter un bien résidentiel
             </button>
           </div>
         )}
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
             <AlertDialogDescription>
-              Voulez-vous vraiment supprimer \u00ab {deleteTarget?.titre} \u00bb ? Cette action est irr\u00e9versible.
+              Voulez-vous vraiment supprimer « {deleteTarget?.titre} » ? Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -339,7 +339,7 @@ function EntrepotsTable({ entrepots, statutBadge, onEdit, onDelete }: {
             <tr key={e.id} className="border-b border-border hover:bg-gpro-light/50">
               <td className="p-4 font-medium">{e.titre}</td>
               <td className="p-4 font-mono-spec text-xs">{e.zone}</td>
-              <td className="p-4 font-mono-spec text-xs">{e.surface} m\u00b2</td>
+              <td className="p-4 font-mono-spec text-xs">{e.surface} m²</td>
               <td className="p-4 font-mono-spec text-xs capitalize">{e.gamme}</td>
               <td className="p-4">{statutBadge(e.statut)}</td>
               <td className="p-4 text-right">
@@ -351,7 +351,7 @@ function EntrepotsTable({ entrepots, statutBadge, onEdit, onDelete }: {
             </tr>
           ))}
           {entrepots.length === 0 && (
-            <tr><td colSpan={6} className="p-8 text-center text-muted-foreground">Aucun entrep\u00f4t</td></tr>
+            <tr><td colSpan={6} className="p-8 text-center text-muted-foreground">Aucun entrepôt</td></tr>
           )}
         </tbody>
       </table>
@@ -372,7 +372,7 @@ function VillasTable({ villas, statutBadge, onEdit, onDelete }: {
           <tr className="border-b border-border">
             <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Titre</th>
             <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Quartier</th>
-            <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Pi\u00e8ces</th>
+            <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Pièces</th>
             <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Prix</th>
             <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Statut</th>
             <th className="text-right p-4 font-display text-uppercase text-xs text-muted-foreground">Actions</th>
@@ -395,7 +395,7 @@ function VillasTable({ villas, statutBadge, onEdit, onDelete }: {
             </tr>
           ))}
           {villas.length === 0 && (
-            <tr><td colSpan={6} className="p-8 text-center text-muted-foreground">Aucun bien r\u00e9sidentiel</td></tr>
+            <tr><td colSpan={6} className="p-8 text-center text-muted-foreground">Aucun bien résidentiel</td></tr>
           )}
         </tbody>
       </table>
@@ -415,7 +415,7 @@ function AvisTable({ avis, onEdit, onDelete, onToggleActive }: {
         <thead>
           <tr className="border-b border-border">
             <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Client</th>
-            <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">T\u00e9moignage</th>
+            <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Témoignage</th>
             <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Note</th>
             <th className="text-left p-4 font-display text-uppercase text-xs text-muted-foreground">Statut</th>
             <th className="text-right p-4 font-display text-uppercase text-xs text-muted-foreground">Actions</th>
@@ -457,7 +457,7 @@ function AvisTable({ avis, onEdit, onDelete, onToggleActive }: {
                   }`}
                 >
                   {a.active ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                  {a.active ? 'Publi\u00e9' : 'Masqu\u00e9'}
+                  {a.active ? 'Publié' : 'Masqué'}
                 </button>
               </td>
               <td className="p-4 text-right">
