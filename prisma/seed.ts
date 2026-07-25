@@ -25,7 +25,7 @@ async function main() {
       typeMarchandise: 'Palettisé, vrac, alimentaire',
       typeAcces: 'Porte sectionnelle, camion 19T',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/hero-warehouse.jpg', '/images/warehouse-interior.jpg']),
     },
     {
       titre: 'Entrepôt Logistique Koumassi',
@@ -35,7 +35,7 @@ async function main() {
       typeMarchandise: 'Conteneurs, marchandises industrielles',
       typeAcces: 'Quai de déchargement, semi-remorque',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/hero-warehouse.jpg', '/images/warehouse-interior.jpg']),
     },
     {
       titre: 'Entrepôt Compact Adjamé',
@@ -45,7 +45,7 @@ async function main() {
       typeMarchandise: 'Stockage léger, e-commerce',
       typeAcces: 'Porte piétonne + véhicule léger',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/hero-warehouse.jpg', '/images/warehouse-interior.jpg']),
     },
     {
       titre: 'Entrepôt Vridi Port',
@@ -55,7 +55,7 @@ async function main() {
       typeMarchandise: 'Logistique portuaire, conteneurs',
       typeAcces: 'Quai de déchargement, semi-remorque',
       statut: 'loué',
-      photos: '[]',
+      photos: JSON.stringify(['/images/hero-warehouse.jpg', '/images/warehouse-interior.jpg']),
     },
     {
       titre: 'Entrepôt Treichville Central',
@@ -65,7 +65,7 @@ async function main() {
       typeMarchandise: 'Marchandises diverses, palettisé',
       typeAcces: 'Porte sectionnelle, camion 19T',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/hero-warehouse.jpg', '/images/warehouse-interior.jpg']),
     },
     {
       titre: 'Entrepôt Abobo Nord',
@@ -75,7 +75,7 @@ async function main() {
       typeMarchandise: 'Stockage léger',
       typeAcces: 'Porte piétonne + véhicule léger',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/hero-warehouse.jpg', '/images/warehouse-interior.jpg']),
     },
   ];
 
@@ -92,7 +92,7 @@ async function main() {
       description: 'Belle villa avec jardin, piscine et garage. Quartier résidentiel calme et sécurisé, proche des écoles internationales et du centre-ville.',
       prix: 'sur demande',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/villa-luxury.jpg']),
     },
     {
       titre: 'Villa 3 Pièces Marcory',
@@ -101,7 +101,7 @@ async function main() {
       description: 'Villa moderne entièrement rénovée, climatisée, avec terrasse. Idéale pour un couple ou une petite famille.',
       prix: '350 000 FCFA/mois',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/villa-luxury.jpg']),
     },
     {
       titre: 'Villa 7 Pièces Riviera',
@@ -110,7 +110,7 @@ async function main() {
       description: 'Villa de prestige avec piscine privée, jardin paysager, dépendance gardien, et 3 places de parking. Sécurité 24h/24.',
       prix: 'sur demande',
       statut: 'disponible',
-      photos: '[]',
+      photos: JSON.stringify(['/images/villa-luxury.jpg']),
     },
     {
       titre: 'Villa 4 Pièces Yopougon',
@@ -119,7 +119,7 @@ async function main() {
       description: 'Villa spacieuse dans quartier résidentiel. Salon double, cuisine équipée, 2 salles de bain.',
       prix: '200 000 FCFA/mois',
       statut: 'loué',
-      photos: '[]',
+      photos: JSON.stringify(['/images/villa-luxury.jpg']),
     },
   ];
 
