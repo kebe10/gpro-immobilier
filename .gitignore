@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -50,5 +51,15 @@ test
 prompt
 
 server.log
+
+# Database (SQLite - use a real DB in production)
+db/
+prisma/*.db
+prisma/*.db-journal
+
+# Uploaded files (use cloud storage in production)
+public/uploads/*
+!public/uploads/.gitkeep
+
 # Skills directory
 /skills/
