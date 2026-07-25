@@ -246,7 +246,7 @@ export default function VillaDetail() {
       )}
 
       <a
-        href="https://wa.me/2250777041010"
+        href="https://wa.me/2250594249933"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 bg-gpro-accent text-white px-6 py-3 font-display text-uppercase hover:bg-gpro-accent/80 transition-colors"
